@@ -1,44 +1,44 @@
--- create database lab9GroupBy;
--- use lab9GroupBy;
--- CREATE TABLE employees (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     name VARCHAR(100),
---     department VARCHAR(100),
---     salary DECIMAL(10, 2)
--- );
+-- -- create database lab9GroupBy;
+-- -- use lab9GroupBy;
+-- -- CREATE TABLE employees (
+-- --     id INT AUTO_INCREMENT PRIMARY KEY,
+-- --     name VARCHAR(100),
+-- --     department VARCHAR(100),
+-- --     salary DECIMAL(10, 2)
+-- -- );
 
--- INSERT INTO employees (name, department, salary)
--- VALUES ('John Doe', 'Sales', 50000),
---     ('Jane Smith', 'Sales', 60000),
---     ('Tom Jones', 'Marketing', 55000),
---     ('Alice Johnson', 'Marketing', 52000),
---     ('Bob Brown', 'IT', 60000),
---     ('Emily Davis', 'IT', 65000);
--- #Group employees by department and calculate the total salary for each department:
+-- -- INSERT INTO employees (name, department, salary)
+-- -- VALUES ('John Doe', 'Sales', 50000),
+-- --     ('Jane Smith', 'Sales', 60000),
+-- --     ('Tom Jones', 'Marketing', 55000),
+-- --     ('Alice Johnson', 'Marketing', 52000),
+-- --     ('Bob Brown', 'IT', 60000),
+-- --     ('Emily Davis', 'IT', 65000);
+-- -- #Group employees by department and calculate the total salary for each department:
+-- -- SELECT department,
+-- --     SUM(salary) as total_salary
+-- -- FROM employees
+-- -- GROUP BY department;
+-- -- # Find the average salary for each department:
+-- -- SELECT department,
+-- --     AVG(salary) AS average_salary
+-- -- FROM employees
+-- -- GROUP BY department;
+-- -- #Count the number of employees in each department:
+-- -- SELECT department,
+-- --     COUNT(*) AS num_employees
+-- -- FROM employees
+-- -- GROUP BY department;
+-- -- #Find the highest salary in each department:
 -- SELECT department,
---     SUM(salary) as total_salary
+--     MAX(salary) AS highest_salary
 -- FROM employees
 -- GROUP BY department;
--- # Find the average salary for each department:
--- SELECT department,
---     AVG(salary) AS average_salary
--- FROM employees
--- GROUP BY department;
--- #Count the number of employees in each department:
--- SELECT department,
---     COUNT(*) AS num_employees
--- FROM employees
--- GROUP BY department;
--- #Find the highest salary in each department:
-SELECT department,
-    MAX(salary) AS highest_salary
-FROM employees
-GROUP BY department;
--- #Find the lowest salary in each department:
--- SELECT department,
---     MIN(salary) AS lowest_salary
--- FROM employees
--- GROUP BY department;
--- select *
--- from employees;
--- groupby.sql Displaying groupby.sql.
+-- -- #Find the lowest salary in each department:
+-- -- SELECT department,
+-- --     MIN(salary) AS lowest_salary
+-- -- FROM employees
+-- -- GROUP BY department;
+-- -- select *
+-- -- from employees;
+-- -- groupby.sql Displaying groupby.sql.
