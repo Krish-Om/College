@@ -1,5 +1,5 @@
 def main():
-    print("Hello from python-class!")
+    print("Hello from house-price-prediction!")
 
 
 if __name__ == "__main__":
