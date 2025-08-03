@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.13"
 
 [[package]]
@@ -444,6 +444,7 @@ dependencies = [
     { name = "fireducks" },
     { name = "ipykernel" },
     { name = "jax" },
+    { name = "joblib" },
     { name = "jupyter" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -459,6 +460,7 @@ requires-dist = [
     { name = "fireducks", specifier = ">=1.3.3" },
     { name = "ipykernel", specifier = ">=6.30.0" },
     { name = "jax", specifier = ">=0.7.0" },
+    { name = "joblib", specifier = ">=1.5.1" },
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "matplotlib", specifier = ">=3.10.3" },
     { name = "numpy", specifier = ">=2.3.2" },

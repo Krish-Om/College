@@ -50,6 +50,6 @@ def nQueen(n):
         return [-1]
 
 if __name__ == "__main__":
-    n = 90
+    n = 8
     ans = nQueen(n)
     print(" ".join(map(str, ans)))
