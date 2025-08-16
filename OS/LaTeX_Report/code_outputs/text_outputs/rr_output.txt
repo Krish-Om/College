@@ -1,0 +1,21 @@
+Round Robin Scheduling (Time Quantum = 2)
+Process execution order:
+P0 runs from time 0 to 2 (remaining: 3)
+P1 runs from time 2 to 4 (remaining: 1)
+P2 runs from time 4 to 5 (completed)
+P3 runs from time 5 to 7 (remaining: 2)
+P0 runs from time 7 to 9 (remaining: 1)
+P1 runs from time 9 to 10 (completed)
+P3 runs from time 10 to 12 (completed)
+P0 runs from time 12 to 13 (completed)
+
+Result:
+
+P	BT	CT	TAT	WT
+P0	5	13	13	8
+P1	3	10	10	7
+P2	1	5	5	4
+P3	4	12	12	8
+
+Total Waiting Time: 27	Avg Waiting Time: 6.75
+Total Turnaround Time: 40	Avg Turnaround Time: 10.00

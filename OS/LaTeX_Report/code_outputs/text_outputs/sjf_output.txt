@@ -1,0 +1,8 @@
+Result:
+
+P	AT	BT	CT	TAT	WT
+P0	1	1	0	0	0
+P1	2	2	2	3	1
+P2	3	3	5	6	3
+Total Waiting Time:0	Avg Wating Time:1.33
+Total Turnaround Time:9	Avg T Time:3.00

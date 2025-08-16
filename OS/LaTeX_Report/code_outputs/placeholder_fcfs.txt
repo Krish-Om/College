@@ -1,0 +1,3 @@
+# Placeholder for FCFS output screenshot
+# Run: ./Lab1/bin/fcfs
+# Take screenshot and save as fcfs_output.png

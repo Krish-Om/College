@@ -1,0 +1,19 @@
+WORST FIT MEMORY ALLOCATION
+===========================
+
+Process	Process Size	Block Allocated	Block Size	Fragment
+-------	------------	---------------	----------	--------
+P1	212		Block 4		600		388
+P2	417		Block 1		500		83
+P3	112		Block 3		300		188
+P4	426		Not Allocated	-		-
+
+--- Memory Status ---
+Block	Size	Status
+-----	----	------
+1	500	Allocated
+2	200	Free
+3	300	Allocated
+4	600	Allocated
+
+Total Internal Fragmentation: 659

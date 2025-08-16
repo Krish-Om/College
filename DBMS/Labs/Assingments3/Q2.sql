@@ -89,9 +89,38 @@ VALUES
     ('Jennifer White', 'Lisa Martinez');
 
 -- a. Find the names of all employees who work for ABC Bank.
-SELECT employee_name FROM works WHERE  company_name="ABC Bank";
-    -- b. Find the name and cities of residence of all employees who work for ABC Bank.
-    SELECT employee_name,city FROM works WHERE company_name='ABC Bank';
-    -- c. Find all employees in the database who live in the same cities and on the same street as do their
-    -- managers.
-    -- d. Give all employees of ABC Bank a 10% raise.
+SELECT
+    employee_name
+FROM
+    works
+WHERE
+    company_name = "ABC Bank";
+
+-- b. Find the name and cities of residence of all employees who work for ABC Bank.
+select
+    *
+from
+    works
+    join company on works.company_name = company.company_name
+WHERE
+    works.company_name = 'ABC Bank';
+
+-- c. Find all employees in the database who live in the same cities and on the same street as do their
+-- managers.
+SELECT
+    *
+FROM
+    employee
+    JOIN manages on employee.employee_name = manages.employee_name;
+
+-- d. Give all employees of ABC Bank a 10% raise.
+UPDATE works
+SET
+    salary = salary + 0.10 * salary
+WHERE
+    company_name = 'ABC Bank';
+
+SELECT
+    *
+FROM
+    works;

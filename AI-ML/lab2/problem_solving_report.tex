@@ -1,0 +1,256 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\pgfplotsset{compat=1.18}
+
+% Configure code listings
+\lstset{
+    language=Python,
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    basicstyle=\ttfamily\small
+}
+
+\title{Lab 2: Problem Solving in AI}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Problem-solving in Artificial Intelligence represents a fundamental aspect of computational intelligence, focusing on developing algorithms and strategies to solve complex problems. This lab explores three classical AI problems: the CryptArithmetic puzzle, the N-Queens problem, and the Water Jug problem. Each problem demonstrates different aspects of AI problem-solving techniques, from constraint satisfaction to state space search.
+
+\subsection{Objectives}
+
+The primary objectives of this lab are:
+\begin{itemize}
+    \item Implement and solve the CryptArithmetic puzzle using constraint satisfaction
+    \item Develop a solution for the N-Queens problem using backtracking
+    \item Solve the Water Jug problem using state space search
+    \item Analyze different problem-solving approaches in AI
+    \item Demonstrate the application of various search and optimization techniques
+\end{itemize}
+
+\section{Problem Implementations}
+
+\subsection{CryptArithmetic Puzzle}
+
+\subsubsection{Description}
+The CryptArithmetic puzzle is a mathematical puzzle where digits are replaced by letters, and the goal is to find the correct digit assignment that satisfies the arithmetic equation. Each letter represents a unique digit, and the leading digit cannot be zero.
+
+\subsubsection{Implementation}
+\begin{lstlisting}[caption=CryptArithmetic Solver Implementation]
+def solve(words, result):
+    # Find all unique characters
+    chars = set(''.join(words + [result]))
+    n = len(chars)
+    if n > 10:
+        return None  # More characters than digits
+
+    # Get starting characters (can't be zero)
+    first = {word[0] for word in words + [result]}
+
+    def get_value(word, assignment):
+        return sum(assignment[c] * (10 ** i) for i, c in enumerate(reversed(word)))
+
+    def backtrack(chars_list, used, assignment):
+        if not chars_list:
+            total = sum(get_value(word, assignment) for word in words)
+            if total == get_value(result, assignment):
+                return assignment
+            return None
+
+        char = chars_list[0]
+        for digit in range(10):
+            if digit == 0 and char in first:
+                continue
+            if digit not in used:
+                assignment[char] = digit
+                used.add(digit)
+                if backtrack(chars_list[1:], used, assignment):
+                    return assignment
+                used.remove(digit)
+                del assignment[char]
+        return None
+
+    solution = backtrack(list(chars), set(), {})
+    if solution:
+        return solution
+    return None
+\end{lstlisting}
+
+\subsubsection{Results}
+The CryptArithmetic solver successfully finds solutions for various word arithmetic puzzles. Here are some example outputs:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{CryptArithmetic/crypt_1.png}
+    \caption{CryptArithmetic Puzzle - Example 1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{CryptArithmetic/crypt_2.png}
+    \caption{CryptArithmetic Puzzle - Example 2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{CryptArithmetic/crypt_3.png}
+    \caption{CryptArithmetic Puzzle - Example 3}
+\end{figure}
+
+\subsection{N-Queens Problem}
+
+\subsubsection{Description}
+The N-Queens problem involves placing N chess queens on an N×N chessboard so that no two queens threaten each other. This means no two queens can share the same row, column, or diagonal.
+
+\subsubsection{Implementation}
+\begin{lstlisting}[caption=N-Queens Problem Implementation]
+def placeQueens(i, cols, leftDiagonal, rightDiagonal, cur, solutions):
+    n = len(cols)
+    if i == n:
+        solutions.append(cur[:])
+        return
+
+    for j in range(n):
+        if cols[j] or rightDiagonal[i + j] or leftDiagonal[i - j + n - 1]:
+            continue
+
+        cols[j] = 1
+        rightDiagonal[i + j] = 1
+        leftDiagonal[i - j + n - 1] = 1
+        cur.append(j + 1)
+
+        placeQueens(i + 1, cols, leftDiagonal, rightDiagonal, cur, solutions)
+
+        cur.pop()
+        cols[j] = 0
+        rightDiagonal[i + j] = 0
+        leftDiagonal[i - j + n - 1] = 0
+
+def nQueen(n):
+    cols = [0] * n
+    leftDiagonal = [0] * (n * 2)
+    rightDiagonal = [0] * (n * 2)
+    cur = []
+    solutions = []
+
+    placeQueens(0, cols, leftDiagonal, rightDiagonal, cur, solutions)
+    return solutions if solutions else [[-1]]
+\end{lstlisting}
+
+\subsubsection{Results}
+The N-Queens solver successfully finds multiple solutions for different board sizes. Here are some example outputs:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{NQueen/nqueen_1.png}
+    \caption{N-Queens Solution - Configuration 1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{NQueen/nqueen_2.png}
+    \caption{N-Queens Solution - Configuration 2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{NQueen/nqueen_3.png}
+    \caption{N-Queens Solution - Configuration 3}
+\end{figure}
+
+\subsection{Water Jug Problem}
+
+\subsubsection{Description}
+The Water Jug problem involves two jugs of different capacities and the goal is to measure a specific amount of water using these jugs. The operations allowed are filling a jug, emptying a jug, and transferring water between jugs.
+
+\subsubsection{Implementation}
+\begin{lstlisting}[caption=Water Jug Problem Implementation]
+from collections import deque
+
+def waterjug(a, b, target):
+    visited = set()
+    path = {}
+    q = deque([(0, 0)])
+    
+    while q:
+        u, v = q.popleft()
+        
+        if (u, v) in visited:
+            continue
+            
+        if u == target or v == target:
+            moves = []
+            state = (u, v)
+            while state in path:
+                moves.append(state)
+                state = path[state]
+            moves.append((0, 0))
+            return moves[::-1]
+            
+        visited.add((u, v))
+        
+        # Fill jug 1
+        if (a, v) not in visited:
+            q.append((a, v))
+            path[(a, v)] = (u, v)
+        
+        # Fill jug 2
+        if (u, b) not in visited:
+            q.append((u, b))
+            path[(u, b)] = (u, v)
+        
+        # Empty jug 1
+        if (0, v) not in visited:
+            q.append((0, v))
+            path[(0, v)] = (u, v)
+        
+        # Empty jug 2
+        if (u, 0) not in visited:
+            q.append((u, 0))
+            path[(u, 0)] = (u, v)
+        
+        # Pour from jug 1 to jug 2
+        amount = min(u, b - v)
+        if (u - amount, v + amount) not in visited:
+            q.append((u - amount, v + amount))
+            path[(u - amount, v + amount)] = (u, v)
+        
+        # Pour from jug 2 to jug 1
+        amount = min(v, a - u)
+        if (u + amount, v - amount) not in visited:
+            q.append((u + amount, v - amount))
+            path[(u + amount, v - amount)] = (u, v)
+    
+    return None
+\end{lstlisting}
+
+\subsubsection{Results}
+The Water Jug solver finds the optimal sequence of steps to measure the target amount of water. The program outputs the sequence of states (jug1, jug2) from initial state to the goal state.
+
+\section{Conclusion}
+
+This lab demonstrated the implementation of three classical AI problem-solving techniques:
+\begin{itemize}
+    \item Constraint satisfaction and backtracking in the CryptArithmetic puzzle
+    \item State space search and backtracking in the N-Queens problem
+    \item Breadth-first search in the Water Jug problem
+\end{itemize}
+
+Each implementation showcases different aspects of AI problem-solving strategies, from constraint handling to state space exploration. The solutions demonstrate the effectiveness of systematic search approaches in solving complex problems with well-defined constraints and goals.
+
+\end{document}
