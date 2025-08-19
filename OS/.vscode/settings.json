@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "*.dbclient-js": "javascript",
+        "stdio.h": "c",
+        "DFA2.C": "cpp"
     }
 }

@@ -1,0 +1,279 @@
+% Operating Systems Lab Report
+\documentclass[12pt,a4paper]{article}
+
+% Encoding and layout
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{enumitem}
+
+% Figures and links
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[hidelinks]{hyperref}
+
+% Page border
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+% Code listings
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{etoolbox}
+
+% Graphics search paths (relative to this file)
+\graphicspath{{../Lab1/images/}{../Lab2/images/}{../Lab3/images/}{../Lab4/images/}}
+
+% Listings configuration for C
+\lstdefinestyle{cstyle}{%
+  language=C,
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=8pt,
+  showstringspaces=false,
+  tabsize=4,
+  breaklines=true,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{gray!70}\itshape,
+  stringstyle=\color{teal!70!black},
+  frame=single,
+  rulecolor=\color{black!30},
+  keepspaces=true
+}
+
+% Helper: robust code inclusion across multiple lab directories
+% Usage: \codelisting[<lst options>]{<filename.c>}
+\newcommand{\codelisting}[2][]{%
+  \begingroup
+  \def\filefound{}%
+  \def\thefile{}%
+  \def\myfile{#2}%
+  % Search order covers mixed-case folder names and being run from repo root or report/
+  \def\searchdirs{../Lab1/,../Lab2/,../Lab3/,../Lab4/}%
+  % Expand list then iterate
+  \edef\searchcsv{\searchdirs}%
+  \expandafter\forcsvlist\expandafter\checkfile\expandafter{\searchcsv}%
+  \ifx\filefound\empty
+    % Fallback: try as-given (relative to current working directory)
+    \lstinputlisting[#1]{#2}%
+  \else
+    \lstinputlisting[#1]{\thefile}%
+  \fi
+  \endgroup
+}
+\newcommand{\checkfile}[1]{\IfFileExists{#1\myfile}{\gdef\filefound{yes}\gdef\thefile{#1\myfile}}{}}
+
+% Helper macro for consistent figure blocks
+\newcommand{\osfigure}[3]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{#1}
+    \caption{#2}
+    \label{#3}
+  \end{figure}%
+}
+
+\title{Operating Systems Lab Report}
+
+% Page border configuration
+\pagestyle{fancy}
+\fancyhf{} % Clear all headers and footers
+\setlength{\headheight}{15pt} % Fix header height warning
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+\fancyhead[C]{\textbf{Operating Systems Lab Report}}
+\fancyfoot[C]{\thepage}
+
+% Add border around entire page
+\usepackage{eso-pic}
+\AddToShipoutPicture{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \draw[line width=2pt] 
+      ([xshift=0.5cm,yshift=-0.5cm]current page.north west) 
+      rectangle 
+      ([xshift=-0.5cm,yshift=0.5cm]current page.south east);
+  \end{tikzpicture}
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\vspace{1em}
+
+\newpage
+\section{Lab 1: CPU Scheduling Algorithms}
+\subsection{Introduction}
+CPU scheduling chooses which ready process runs next to balance responsiveness and throughput. This lab compares four classic policies: FCFS (simple, non-preemptive; can suffer convoy effect), SJF non-preemptive (picks the shortest CPU burst; minimizes average waiting with perfect burst knowledge), Priority non-preemptive (highest priority first; risk of starvation without aging), and Round Robin (preemptive, fixed time quantum; good interactive response at the cost of more context switches).
+\subsection{Objectives}
+\begin{itemize}[nosep]
+  \item Implement classic CPU scheduling algorithms: FCFS, SJF (non-preemptive), Priority (non-preemptive), and Round Robin.
+  \item Compute waiting time, turnaround time, and average metrics.
+  \item Visualize schedules using sample inputs and verify against expected behavior.
+\end{itemize}
+
+\subsection{FCFS (First-Come, First-Served)}
+\textbf{Idea:} Execute processes in order of arrival; non-preemptive. Simple but can cause convoy effect.
+
+\paragraph{Source} \codelisting[style=cstyle,caption={FCFS implementation},label={lst:fcfs}]{fcfs.c}
+
+ 
+\osfigure{fcfs.png}{FCFS run output screenshot}{fig:fcfs}
+
+\subsection{SJF (Shortest Job First)}
+\textbf{Idea:} Always select the shortest burst time among available processes; non-preemptive variant implemented here. Minimizes average waiting time under perfect knowledge of burst times.
+
+\paragraph{Source} \codelisting[style=cstyle,caption={SJF implementation},label={lst:sjf}]{sjf.c}
+
+ 
+\osfigure{sjf.png}{SJF run output screenshot}{fig:sjf}
+
+\subsection{Priority Scheduling (Non-preemptive)}
+\textbf{Idea:} Select the process with highest priority (lowest numeric value or highest rank depending on convention). Non-preemptive variant.
+
+\paragraph{Source} \codelisting[style=cstyle,caption={Priority Scheduling implementation},label={lst:priority}]{priority.c}
+
+\paragraph{Sample Outputs}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{priority_1.png}
+    \caption{Priority example 1}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{priority_2.png}
+    \caption{Priority example 2}
+  \end{subfigure}
+  \caption{Priority scheduling outputs}
+  \label{fig:priority}
+\end{figure}
+
+\subsection{Round Robin}
+\textbf{Idea:} Time-sliced preemptive scheduling with fixed quantum; improves responsiveness.
+
+\paragraph{Source} \codelisting[style=cstyle,caption={Round Robin implementation},label={lst:rr}]{round_robin.c}
+
+ 
+\osfigure{round_robin.png}{Round Robin run output screenshot}{fig:rr}
+
+\newpage
+\section{Lab 2: Deadlock Avoidance and Detection}
+\subsection{Introduction}
+Competing resource requests can lead to circular wait and deadlock. Banker's algorithm prevents deadlock by granting only those requests that keep the system in a safe state (i.e., some completion order exists for all processes). Deadlock detection, by contrast, analyzes the current allocation and outstanding requests to identify processes that cannot finish under available resources, flagging deadlock without preventing it.
+\subsection{Objectives}
+\begin{itemize}[nosep]
+  \item Implement Banker's algorithm for deadlock avoidance and safe sequence detection.
+  \item Implement a deadlock detection routine for a resource allocation graph/state.
+\end{itemize}
+
+\subsection{Banker's Algorithm}
+\textbf{Idea:} Determine if a resource request can be safely granted by checking for a safe sequence.
+
+\paragraph{Source} \codelisting[style=cstyle,caption={Banker's Algorithm implementation},label={lst:bankers}]{bankers.c}
+
+\paragraph{Sample Outputs}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{banker_1.png}
+    \caption{Safe sequence found}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{banker_2.png}
+    \caption{Another allocation scenario}
+  \end{subfigure}
+  \caption{Banker's algorithm outputs}
+  \label{fig:bankers}
+\end{figure}
+
+\subsection{Deadlock Detection}
+\textbf{Idea:} Given current allocation and requests, detect deadlock by attempting to find a sequence that finishes all processes; if some remain unfinished, they are deadlocked.
+
+\paragraph{Source} \codelisting[style=cstyle,caption={Deadlock Detection implementation},label={lst:deadlock}]{deadlock_detection.c}
+
+ 
+\osfigure{deadlockdetection.png}{Deadlock detection run output screenshot}{fig:deadlock}
+
+\newpage
+\section{Lab 3: Memory Management and Page Replacement}
+\subsection{Introduction}
+This lab covers contiguous allocation strategies and page replacement. For contiguous allocation: First Fit picks the first hole large enough; Best Fit chooses the smallest adequate hole; Worst Fit uses the largest hole to reduce tiny fragments. For paging: FIFO evicts the oldest page (can show Belady's anomaly), LRU evicts the least recently used page (often a practical approximation to optimal), and Optimal replaces the page whose next use is farthest in the future (a theoretical lower bound).
+\subsection{Objectives}
+\begin{itemize}[nosep]
+  \item Implement contiguous memory allocation strategies: First Fit, Best Fit, and Worst Fit.
+  \item Implement page replacement algorithms: FIFO, LRU, and Optimal.
+  \item Compare page fault behavior with representative reference strings.
+\end{itemize}
+
+\subsection{First Fit}
+\paragraph{Source} \codelisting[style=cstyle,caption={First Fit implementation},label={lst:firstfit}]{first_fit.c}
+  \osfigure{first_fit.png}{First Fit output screenshot}{fig:firstfit}
+
+\subsection{Best Fit}
+\paragraph{Source} \codelisting[style=cstyle,caption={Best Fit implementation},label={lst:bestfit}]{best_fit.c}
+  \osfigure{best_fit.png}{Best Fit output screenshot}{fig:bestfit}
+
+\subsection{Worst Fit}
+\paragraph{Source} \codelisting[style=cstyle,caption={Worst Fit implementation},label={lst:worstfit}]{worst_fit.c}
+  \osfigure{worst_fit.png}{Worst Fit output screenshot}{fig:worstfit}
+
+\subsection{FIFO Page Replacement}
+\paragraph{Source} \codelisting[style=cstyle,caption={FIFO Page Replacement implementation},label={lst:fifo}]{fifo_page_replacement.c}
+  \osfigure{fifo_page_replacement.png}{FIFO page replacement output screenshot}{fig:fifo}
+
+\subsection{LRU Page Replacement}
+\paragraph{Source} \codelisting[style=cstyle,caption={LRU Page Replacement implementation},label={lst:lru}]{lru_page_replacement.c}
+  \osfigure{lru_page_replacement.png}{LRU page replacement output screenshot}{fig:lru}
+
+\subsection{Optimal Page Replacement}
+\paragraph{Source} \codelisting[style=cstyle,caption={Optimal Page Replacement implementation},label={lst:opt}]{optimal_page_replacement.c}
+  \osfigure{optimal_page_replacement.png}{Optimal page replacement output screenshot}{fig:opt}
+
+\newpage
+\section{Lab 4: Disk Scheduling}
+\subsection{Introduction}
+Disk scheduling orders pending I/O requests to reduce total head movement. SCAN ("elevator") sweeps in one direction then reverses, LOOK is similar but turns around at the last outstanding request rather than the disk end, and SSTF always serves the nearest request next, which lowers average seek but can starve far requests.
+\subsection{Objectives}
+\begin{itemize}[nosep]
+  \item Implement and compare disk head scheduling algorithms: SCAN, LOOK, and SSTF.
+  \item Visualize head movement order and total seek distance on sample input.
+\end{itemize}
+
+\subsection{SCAN}
+\paragraph{Source} \codelisting[style=cstyle,caption={SCAN disk scheduling implementation},label={lst:scan}]{scan.c}
+  \osfigure{scan.png}{SCAN output screenshot}{fig:scan}
+
+\subsection{LOOK}
+\paragraph{Source} \codelisting[style=cstyle,caption={LOOK disk scheduling implementation},label={lst:look}]{look.c}
+  \osfigure{look.png}{LOOK output screenshot}{fig:look}
+
+\subsection{SSTF}
+\paragraph{Source} \codelisting[style=cstyle,caption={SSTF disk scheduling implementation},label={lst:sstf}]{sstf.c}
+  
+\osfigure{sstf.png}{SSTF output screenshot}{fig:sstf}
+
+\newpage
+\section*{Observations and Conclusion}
+\addcontentsline{toc}{section}{Observations and Conclusion}
+\begin{itemize}[nosep]
+  \item CPU scheduling: SJF minimizes average waiting time for known bursts; Round Robin improves responsiveness at the cost of context switching; Priority may cause starvation without aging.
+  \item Banker's algorithm ensures a safe sequence exists before allocation; detection flags processes that cannot complete under current allocation.
+  \item For contiguous allocation, Best Fit may minimize leftover fragmentation per allocation but can create many small holes; First Fit is fast; Worst Fit reduces the creation of tiny fragments in some scenarios.
+  \item Page replacement: Optimal is theoretical upper bound (requires future knowledge); LRU approximates it when recency correlates with reuse; FIFO suffers from Belady's anomaly on some strings.
+  \item Disk scheduling: SSTF reduces seek in dense regions but may starve distant requests; SCAN/LOOK provide better fairness while keeping seek times reasonable.
+\end{itemize}
+
+\vspace{1em}
+\noindent\textit{Note:} This report embeds the exact C source files from the lab folders to keep implementation and documentation aligned.
+
+\end{document}
