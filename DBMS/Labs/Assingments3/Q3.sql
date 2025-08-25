@@ -71,16 +71,17 @@ VALUES
 -- IT Department
 -- b. Write an expression in SQL to find the department whose employee earns the maximum salary.
 SELECT
-    dname
+    d.dname
 FROM
-    `Department`
-    JOIN `Employee` ON `Department`.manager_id = `Employee`.emp_id
+    Department d
+    JOIN Works w ON d.dept_id = w.dept_id
+    JOIN Employee e ON w.emp_id = e.emp_id
 WHERE
-    salary = (
+    e.salary = (
         SELECT
             MAX(salary)
         FROM
-            `Employee`
+            Employee
     );
 
 -- c. Write SQL to find the name of employee, department name and no. of hours they work.

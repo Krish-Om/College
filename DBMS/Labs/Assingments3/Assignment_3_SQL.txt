@@ -1,0 +1,123 @@
+Assignment 3
+SQL Practice Questions
+1. Consider the following relations where primary keys are underlined
+member (member_no, name, age)
+book (isbn, title, authors, publisher)
+borrower (member_no, isbn, date)
+a. Develop DDL in SQL to implement above schema.
+Write SQL statements for the following
+b. Display the name of members who have taken book between „2081-06-15‟ to „2081-08-15‟
+c. Display the title of the book taken by member „Hari‟
+d. Display the name and age of member who have taken a book written by „Avi Silberschatz‟
+e. Display the list of members whose first name starts from the letter „P‟.
+f. Update the name and age of member whose member_no is 100.
+g. Delete all records from relation borrower without deleting the table.
+
+2. Consider an employee database, where the primary keys are underlined.
+employee (employee_name, street, city)
+works (employee_name, company_name, salary)
+company (company_name, city)
+manages (employee_name, manager_name)
+Give an expression in SQL for each of the following queries
+a. Find the names of all employees who work for ABC Bank.
+b. Find the name and cities of residence of all employees who work for ABC Bank.
+c. Find all employees in the database who live in the same cities and on the same street as do their
+managers.
+d. Give all employees of ABC Bank a 10% raise.
+
+3. Consider the following relational data model
+Employee( empid, ename, age, salary)
+Department(deptid, dname, budget, managerid)
+Works(empid, deptid, hours)
+a. Write the SQL statements required to create above relations, including appropriate versions of all
+primary and foreign key integrity constraints.
+b. Write an expression in SQL to find the department whose employee earns the maximum salary.
+c. Write SQL to find the name of employee, department name and no. of hours they work.
+d. Write an expression in SQL to give every employee a 20% raise in salary whose age is in between 45
+to 50 years.
+4. Consider the following supplier database, where primary keys are underlined:
+Supplier (supplier –id, supplier name, city)
+Supplies (supplier –id, part-id, quantity)
+Parts (part- id, par-name, color, weight)
+Construct the following relation algebra queries for this relation database
+(a) Find the name of all suppliers located in city "Kathmandu"
+1
+
+(b) Find the name of all parts supplied "ABC Company".
+(c) Find the name of all parts that are supplied in quantity greater than 300.
+(d) Find the number of all parts supplied by "ABC Company".
+(e) Find the name of all suppliers who supply more than 30 different parts.
+5. Assume a database about Company,
+Employee(ss#, name)
+Company(cname, address)
+Works(ss#, cname)
+Supervises(supervisor_ss#, employee_ss#)
+Write relational algebra and SQL queries for each of the following cases:
+a. Find the names of all the supervisors that work in companies whose address equal „Kathmandu‟
+b. Find the names of all the companies who have more than 4 supervisors.
+c. Find the name of the supervisor who has the largest no. of employees.
+6. Consider the following supplier database, where primary keys are underlined:
+Supplier(supplier-id, supplier-name, city)
+Supplies(supplier-id, part-id, quantity)
+Parts(part-id, part-name, color, weight)
+Construct the relational algebra and SQL for the following queries:
+a. Find the name of all supplies located in city “Kathmandu”
+b. Find the name of all parts supplied by “ABC company”
+c. Find the name of all parts that are supplied in quantity greater than 300.
+d. Find the number of parts supplied by “ABC Company”
+e. Find the name of all suppliers who supply more than 30 different parts.
+7. Consider the following relational schema:
+Employee(Ename, street, city)
+Works(Ename, company_name, salary)
+Company(Company_name, city)
+Manages(Ename, manager_name)
+a) Write relational algebra queries to:
+i. Find the employee name who work in „NMB bank‟
+ii. Find all the employee names who live in the same city as their company is located.
+iii. Find the name and city of those employees whose salary is greater than 30000 and lives in
+„Ktm‟ city.
+b) Write SQL queries for the following:
+i. Create Employee and Works relation with primary key and foreign key constraints.
+ii. Find the employee_name, their company name and city name which ends with „pur‟ as
+substring.
+iii. Increase the salary of each employee by 25% whose salary is less than 30000
+
+2
+
+8. Consider the following relational data model.
+Student(crn, name, address, phone, dob)
+Course(coursed, crn, duration, fee)
+Enroll(enrolled, cname, courseid, enrolldata, completedata)
+i. Write the SQL statements required to create above relations, including appropriate versions of all
+primary and foreign key integrity constraints,
+ii. Write an expression in SQL to find crn, names and enroll data of all students who have taken the
+course „java‟(cname).
+iii. Write SQL to find the names and address of all the students who have taken both course java and
+linux.
+iv. Write an expression in SQL to create a view „Student_course‟ having the attributes crn, cname,
+phone, coursename, enrolldata.
+9. Consider the following relational schema:
+tblSalesman(s-id, name, city, commission)
+tblOrders(ord-no, prch-amt, ord-date, c-id,s-id)
+tblCustomer(c-id, name, city, grade, s-id)
+Write SQL query to
+i. Find those salesman with all information whose name containing the 1st character is „N‟ and the 4th
+character is „R‟ and rests may be any character.
+ii. Find the highest purchase amount on a date „2017-07-17‟ for each salesman with their ID.
+iii. Count the customers with grades above Kathmandu‟s average.
+iv. Increase the commission of salesmen by 2% if they are from Humla.
+10. Consider the following relational database model:
+Author(a-name, citizenship, birthYear) Book(isbn, title, a-name)
+Topic(isbn, subject)
+Branch(libname, city)
+Instock(isbn, libname, quantity)
+Write SQL query for the following:
+i. Give the cities where each book is held.
+ii. Give the title and author of each book of which at least two copies are held in a branch located in
+Kathmandu.
+iii. Delete those books that are from the author „xyz‟
+iv. List the total no. of available books of each subject.
+
+3
+
+

@@ -108,10 +108,14 @@ WHERE
 -- c. Find all employees in the database who live in the same cities and on the same street as do their
 -- managers.
 SELECT
-    *
+    e.employee_name
 FROM
-    employee
-    JOIN manages on employee.employee_name = manages.employee_name;
+    employee e
+    JOIN manages m ON e.employee_name = m.employee_name
+    JOIN employee mgr ON m.manager_name = mgr.employee_name
+WHERE
+    e.city = mgr.city
+    AND e.street = mgr.street;
 
 -- d. Give all employees of ABC Bank a 10% raise.
 UPDATE works

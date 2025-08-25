@@ -19,6 +19,7 @@ CREATE TABLE
     Part (
         part_id INT PRIMARY KEY,
         part_name VARCHAR(50),
+        color VARCHAR(20),
         weight NUMERIC
     );
 
@@ -26,7 +27,7 @@ CREATE TABLE
     Supplies (
         supplier_id INT,
         part_id INT,
-        quatity INT,
+        quantity INT,
         PRIMARY KEY (supplier_id, part_id),
         Foreign Key (supplier_id) REFERENCES Supplier (supplier_id),
         FOREIGN KEY (part_id) REFERENCES Part (part_id)
@@ -44,47 +45,47 @@ VALUES
 
 -- Insert sample data into Part table
 INSERT INTO
-    Part (part_id, part_name, weight)
+    Part (part_id, part_name, color, weight)
 VALUES
-    (1, 'Bolt', 0.1),
-    (2, 'Nut', 0.05),
-    (3, 'Screw', 0.08),
-    (4, 'Wire', 0.2),
-    (5, 'Pipe', 2.5),
-    (6, 'Chain', 1.5),
-    (7, 'Washer', 0.03),
-    (8, 'Bearing', 0.5),
-    (9, 'Spring', 0.15),
-    (10, 'Gear', 1.2),
-    (11, 'Shaft', 3.0),
-    (12, 'Gasket', 0.07),
-    (13, 'Piston', 2.8),
-    (14, 'Valve', 0.9),
-    (15, 'Pulley', 1.8),
-    (16, 'Belt', 0.6),
-    (17, 'Coupling', 1.1),
-    (18, 'Hose', 0.4),
-    (19, 'Flange', 1.3),
-    (20, 'Bracket', 0.8),
-    (21, 'Fastener', 0.04),
-    (22, 'Connector', 0.12),
-    (23, 'Bushing', 0.25),
-    (24, 'Pin', 0.02),
-    (25, 'Ring', 0.06),
-    (26, 'Clip', 0.01),
-    (27, 'Roller', 0.35),
-    (28, 'Socket', 0.45),
-    (29, 'Seal', 0.09),
-    (30, 'Filter', 0.3),
-    (31, 'Mount', 0.7),
-    (32, 'Plug', 0.11),
-    (33, 'Clamp', 0.22),
-    (34, 'Spacer', 0.05),
-    (35, 'Guard', 1.4);
+    (1, 'Bolt', 'Silver', 0.1),
+    (2, 'Nut', 'Silver', 0.05),
+    (3, 'Screw', 'Black', 0.08),
+    (4, 'Wire', 'Copper', 0.2),
+    (5, 'Pipe', 'Gray', 2.5),
+    (6, 'Chain', 'Silver', 1.5),
+    (7, 'Washer', 'Silver', 0.03),
+    (8, 'Bearing', 'Silver', 0.5),
+    (9, 'Spring', 'Silver', 0.15),
+    (10, 'Gear', 'Silver', 1.2),
+    (11, 'Shaft', 'Black', 3.0),
+    (12, 'Gasket', 'Black', 0.07),
+    (13, 'Piston', 'Silver', 2.8),
+    (14, 'Valve', 'Brass', 0.9),
+    (15, 'Pulley', 'Black', 1.8),
+    (16, 'Belt', 'Black', 0.6),
+    (17, 'Coupling', 'Silver', 1.1),
+    (18, 'Hose', 'Black', 0.4),
+    (19, 'Flange', 'Silver', 1.3),
+    (20, 'Bracket', 'Gray', 0.8),
+    (21, 'Fastener', 'Silver', 0.04),
+    (22, 'Connector', 'Brass', 0.12),
+    (23, 'Bushing', 'Bronze', 0.25),
+    (24, 'Pin', 'Silver', 0.02),
+    (25, 'Ring', 'Silver', 0.06),
+    (26, 'Clip', 'Silver', 0.01),
+    (27, 'Roller', 'Black', 0.35),
+    (28, 'Socket', 'Black', 0.45),
+    (29, 'Seal', 'Black', 0.09),
+    (30, 'Filter', 'White', 0.3),
+    (31, 'Mount', 'Black', 0.7),
+    (32, 'Plug', 'Black', 0.11),
+    (33, 'Clamp', 'Silver', 0.22),
+    (34, 'Spacer', 'Silver', 0.05),
+    (35, 'Guard', 'Black', 1.4);
 
 -- Insert sample data into Supplies table
 INSERT INTO
-    Supplies (supplier_id, part_id, quatity)
+    Supplies (supplier_id, part_id, quantity)
 VALUES
     -- ABC Company (supplying more than 30 different parts)
     (1, 1, 400),
@@ -150,51 +151,49 @@ VALUES
 -- quantity > 300
 -- Construct the following relation algebra queries for this relation database
 -- (a) Find the name of all suppliers located in city "Kathmandu"
-SELECT DISTINCT
+SELECT
     supplier_name
 FROM
-    `Supplier`
+    Supplier
 WHERE
     city = 'Kathmandu';
 
 -- (b) Find the name of all parts supplied "ABC Company".
 SELECT DISTINCT
-    part_name
+    p.part_name
 FROM
-    Part
-    JOIN Supplies ON Part.part_id = Supplies.part_id
-    JOIN Supplier ON Supplier.supplier_id = Supplies.supplier_id
+    Part p
+    JOIN Supplies s ON p.part_id = s.part_id
+    JOIN Supplier sup ON s.supplier_id = sup.supplier_id
 WHERE
-    Supplier.supplier_name = 'ABC Company';
+    sup.supplier_name = 'ABC Company';
 
 -- (c) Find the name of all parts that are supplied in quantity greater than 300.
-SELECT
-    part_name
+SELECT DISTINCT
+    p.part_name
 FROM
-    `Part`
-    JOIN `Supplies` ON `Part`.part_id = `Supplies`.part_id
+    Part p
+    JOIN Supplies s ON p.part_id = s.part_id
 WHERE
-    Supplies.quatity > 300;
+    s.quantity > 300;
 
 -- (d) Find the number of all parts supplied by "ABC Company".
 SELECT
-    COUNT(Part.part_id) as supply_count
-from
-    `Part`
-    JOIN `Supplies` ON `Part`.part_id = Supplies.part_id
-    JOIN `Supplier` ON `Supplier`.supplier_id = Supplies.supplier_id
-WHERE
-    `Supplier`.supplier_name = 'ABC Company';
-
--- Find the name of all suppliers who supply more than 30 different parts
-SELECT
-    Supplier.supplier_name
+    COUNT(DISTINCT s.part_id) AS supply_count
 FROM
-    Supplier
-    JOIN Supplies ON Supplier.supplier_id = Supplies.supplier_id
-GROUP BY
-    Supplier.supplier_id,
-    Supplier.supplier_name
-HAVING
-    COUNT(DISTINCT Supplies.part_id) > 30;
+    Supplies s
+    JOIN Supplier sup ON s.supplier_id = sup.supplier_id
+WHERE
+    sup.supplier_name = 'ABC Company';
 
+-- (e) Find the name of all suppliers who supply more than 30 different parts
+SELECT
+    sup.supplier_name
+FROM
+    Supplier sup
+    JOIN Supplies s ON sup.supplier_id = s.supplier_id
+GROUP BY
+    sup.supplier_id,
+    sup.supplier_name
+HAVING
+    COUNT(DISTINCT s.part_id) > 30;

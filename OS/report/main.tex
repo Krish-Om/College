@@ -20,6 +20,16 @@
 \usepackage{tikz}
 \usepackage{eso-pic}
 
+% Draw a border on every page
+\AddToShipoutPictureBG*{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[line width=1pt,rounded corners=8pt]
+      ($(current page.north west)+(1cm,-1cm)$)
+        rectangle
+      ($(current page.south east)+(-1cm,1cm)$);
+  \end{tikzpicture}%
+}
+
 % Code listings
 \usepackage{xcolor}
 \usepackage{listings}

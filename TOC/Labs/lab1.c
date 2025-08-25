@@ -32,7 +32,7 @@ void calculator()
   printf("Enter the operation (+ - * /):");
   getchar();
   scanf("%c", &op);
-p  switch (op)
+  switch (op)
   {
   case '+':
     printf("Sum:%d\n", x + y);
